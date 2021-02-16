@@ -1,4 +1,5 @@
 <?php
+
 //this line makes PHP behave in a more strict way
 declare(strict_types=1);
 
@@ -15,6 +16,23 @@ function whatIsHappening() {
     echo '<h2>$_SESSION</h2>';
     var_dump($_SESSION);
 }
+
+function getEmailAddress() {
+    $email = $_POST['email'];
+    if (isset($email)) {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $email;
+        } else {
+            $email = 'Please enter a valid email address';
+            return $email;
+        }
+    } else {
+        $email = "";
+        return $email;
+    }
+
+}
+
 
 //your products with their price.
 $products = [
