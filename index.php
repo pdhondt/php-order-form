@@ -77,24 +77,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     };
 }
 
+//your products with their price.
+$products_food = [
+    ['name' => 'Club Ham', 'price' => 3.20],
+    ['name' => 'Club Cheese', 'price' => 3],
+    ['name' => 'Club Cheese & Ham', 'price' => 4],
+    ['name' => 'Club Chicken', 'price' => 4],
+    ['name' => 'Club Salmon', 'price' => 5]
+];
 
-    //your products with their price.
-    $products = [
-        ['name' => 'Club Ham', 'price' => 3.20],
-        ['name' => 'Club Cheese', 'price' => 3],
-        ['name' => 'Club Cheese & Ham', 'price' => 4],
-        ['name' => 'Club Chicken', 'price' => 4],
-        ['name' => 'Club Salmon', 'price' => 5]
-    ];
+$products_drinks = [
+    ['name' => 'Cola', 'price' => 2],
+    ['name' => 'Fanta', 'price' => 2],
+    ['name' => 'Sprite', 'price' => 2],
+    ['name' => 'Ice-tea', 'price' => 3],
+];
 
-    $products = [
-        ['name' => 'Cola', 'price' => 2],
-        ['name' => 'Fanta', 'price' => 2],
-        ['name' => 'Sprite', 'price' => 2],
-        ['name' => 'Ice-tea', 'price' => 3],
-    ];
+// make the food items the default when loading the page
+if (!isset($_GET['food'])) {
+    $products = $products_food;
+} else if ($_GET['food'] == 0) {  // when order drinks is clicked, show the drinks items. Otherwise show the food items
+    $products = $products_drinks;
+} else {
+    $products = $products_food;
+}
 
-    $totalValue = 0;
+
+$totalValue = 0;
 
     require 'form-view.php';
 
