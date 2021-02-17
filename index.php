@@ -25,6 +25,7 @@ function whatIsHappening() {
 $email = "";
 $valid_fields = 0;
 $confirmation_msg = "";
+$delivery_time = date("H:i:s", strtotime("+2 Hours"));
 
 // don't initialize empty session variables, otherwise the information is not contained
 // $_SESSION['streetName'] = $_SESSION['streetNumber'] = $_SESSION['city'] = $_SESSION['zipCode'] = "";
@@ -72,9 +73,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['zipCode'] = "Please enter a valid Zipcode";
     }
 
+    if (isset($_POST['express_delivery'])) {
+        $delivery_time = date("H:i:s", strtotime("+45 Minutes"));
+    }
+
     if ($valid_fields == 5) {
-        $confirmation_msg = "Thank you. Your order has been sent.";
-    };
+        $confirmation_msg = "Thank you. Your order has been sent. The delivery time is " . $delivery_time;
+    }
+
 }
 
 //your products with their price.
