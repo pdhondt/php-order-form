@@ -38,21 +38,21 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="street">Street:</label>
-                    <input type="text" name="street" id="street" class="form-control" value="<?php echo htmlspecialchars($streetName); ?>">
+                    <input type="text" name="street" id="street" class="form-control" value="<?php echo htmlspecialchars($_SESSION['streetName']); ?>">
                 </div>
                 <div class="form-group col-md-6">
                     <label for="streetnumber">Street number:</label>
-                    <input type="text" id="streetnumber" name="streetnumber" class="form-control" value="<?php echo htmlspecialchars($streetNumber); ?>">
+                    <input type="text" id="streetnumber" name="streetnumber" class="form-control" value="<?php echo htmlspecialchars($_SESSION['streetNumber']); ?>">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="city">City:</label>
-                    <input type="text" id="city" name="city" class="form-control" value="<?php echo htmlspecialchars($city); ?>">
+                    <input type="text" id="city" name="city" class="form-control" value="<?php echo htmlspecialchars($_SESSION['city']); ?>">
                 </div>
                 <div class="form-group col-md-6">
                     <label for="zipcode">Zipcode</label>
-                    <input type="text" id="zipcode" name="zipcode" class="form-control" value="<?php echo htmlspecialchars($zipCode); ?>">
+                    <input type="text" id="zipcode" name="zipcode" class="form-control" value="<?php echo htmlspecialchars($_SESSION['zipCode']); ?>">
                 </div>
             </div>
         </fieldset>

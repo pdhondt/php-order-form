@@ -6,6 +6,10 @@ declare(strict_types=1);
 //we are going to use session variables so we need to enable sessions
 session_start();
 
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
+
 function whatIsHappening() {
     echo '<h2>$_GET</h2>';
     var_dump($_GET);
@@ -18,9 +22,12 @@ function whatIsHappening() {
 }
 
 // define variables and initialize them with empty values
-$email = $streetName = $streetNumber = $city = $zipCode = "";
+$email = "";
 $valid_fields = 0;
+$confirmation_msg = "";
 
+// don't initialize empty session variables, otherwise the information is not contained
+// $_SESSION['streetName'] = $_SESSION['streetNumber'] = $_SESSION['city'] = $_SESSION['zipCode'] = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -34,35 +41,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (empty($_POST['street'])) {
-        $streetName = "Please enter your street name";
+        $_SESSION['streetName'] = "Please enter your street name";
     } else {
-        $streetName = $_POST['street'];
+        $_SESSION['streetName'] = $_POST['street'];
         $valid_fields++;
     }
 
     if (empty($_POST['streetnumber'])) {
-        $streetNumber = "Please enter your street number";
+        $_SESSION['streetNumber'] = "Please enter your street number";
     } else if (is_numeric($_POST['streetnumber'])) {
-        $streetNumber = $_POST['streetnumber'];
+        $_SESSION['streetNumber'] = $_POST['streetnumber'];
         $valid_fields++;
     } else {
-        $streetNumber = "Please enter a valid street number";
+        $_SESSION['streetNumber'] = "Please enter a valid street number";
     }
 
     if (empty($_POST['city'])) {
-        $city = "Please enter your city";
+        $_SESSION['city'] = "Please enter your city";
     } else {
-        $city = $_POST['city'];
+        $_SESSION['city'] = $_POST['city'];
         $valid_fields++;
     }
 
     if (empty($_POST['zipcode'])) {
-        $zipCode = "Please enter your Zipcode";
+        $_SESSION['zipCode'] = "Please enter your Zipcode";
     } else if (is_numeric($_POST['zipcode'])) {
-        $zipCode = $_POST['zipcode'];
+        $_SESSION['zipCode'] = $_POST['zipcode'];
         $valid_fields++;
     } else {
-        $zipCode = "Please enter a valid Zipcode";
+        $_SESSION['zipCode'] = "Please enter a valid Zipcode";
     }
 
     if ($valid_fields == 5) {
