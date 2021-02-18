@@ -109,12 +109,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['zipCode'] = "Please enter a valid Zipcode";
     }
 
-    foreach ($products AS $i => $product) {
+    // retrieve ordered products via checkboxes & calculate price
+    /*foreach ($products AS $i => $product) {
         if (isset($_POST['products'][$i])) {
             $value = $_POST['products'][$i];
             if ($value == 1) {
                 $price += $product['price'];
             }
+        }
+    }*/
+
+    // retrieve (number of) ordered products via input fields & calculate price
+    foreach ($products AS $i => $product) {
+        if (!empty($_POST['products'][$i])) {
+            $numberOfItems = $_POST['products'][$i];
+            $price += ($numberOfItems * $product['price']);
         }
     }
 
@@ -132,6 +141,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($valid_fields == 5) {
         $confirmation_msg = "Thank you for your order. The delivery time is " . $delivery_time . ". The price is " . $price . "€.";
+    } else {
+        $confirmation_msg = "Please fill in all the fields.";
     }
 
 }
