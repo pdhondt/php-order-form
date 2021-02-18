@@ -56,12 +56,14 @@ $products_drinks = [
 ];
 
 // make the food items the default when loading the page
-if (!isset($_GET['food'])) {
-    $products = $products_food;
-} else if ($_GET['food'] == 0) {  // when order drinks is clicked, show the drinks items. Otherwise show the food items
-    $products = $products_drinks;
-} else {
-    $products = $products_food;
+$products = $products_food;
+
+if (isset($_GET['food'])) {
+    if ($_GET['food'] == 0) {   // when order drinks is clicked, show the drinks items. Otherwise show the food items
+        $products = $products_drinks;
+    } else {
+        $products = $products_food;
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
