@@ -22,6 +22,7 @@ function whatIsHappening() {
 }
 
 // define variables and initialize them with empty values
+$_SESSION['streetName'] = $_SESSION['streetNumber'] = $_SESSION['city'] = $_SESSION['zipCode'] = "";
 $email = "";
 $valid_fields = 0;
 $confirmation_msg = "";
