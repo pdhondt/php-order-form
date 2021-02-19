@@ -22,12 +22,16 @@ function whatIsHappening() {
 }
 
 // define variables and initialize them with empty values
-$_SESSION['streetName'] = $_SESSION['streetNumber'] = $_SESSION['city'] = $_SESSION['zipCode'] = "";
+//$_SESSION['streetName'] = $_SESSION['streetNumber'] = $_SESSION['city'] = $_SESSION['zipCode'] = "";
 $email = "";
 $valid_fields = 0;
 $confirmation_msg = "";
 $delivery_time = date("H:i:s", strtotime("+2 Hours"));
 $price = 0;
+
+//if (!isset($_SESSION['streetName'], $_SESSION['streetNumber'], $_SESSION['city'], $_SESSION['zipCode'])) {
+//    $_SESSION['streetName'] = $_SESSION['streetNumber'] = $_SESSION['city'] = $_SESSION['zipCode'] = "";
+//}
 
 if (isset($_COOKIE['totalValue'])) {
     $totalValue = intval($_COOKIE['totalValue']);
