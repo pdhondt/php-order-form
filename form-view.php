@@ -48,7 +48,7 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="city">City:</label>
-                    <input type="text" id="city" name="city" class="form-control" value="<?php echo htmlspecialchars($_SESSION['city']); ?>">
+                    <input type="text" id="city" name="city" class="form-control" placeholder="<?php echo htmlspecialchars($invalidCity); ?>" value="<?php echo htmlspecialchars($_SESSION['city']); ?>">
                 </div>
                 <div class="form-group col-md-6">
                     <label for="zipcode">Zipcode</label>

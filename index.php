@@ -24,14 +24,15 @@ function whatIsHappening() {
 // define variables and initialize them with empty values
 //$_SESSION['streetName'] = $_SESSION['streetNumber'] = $_SESSION['city'] = $_SESSION['zipCode'] = "";
 $email = "";
-$valid_fields = 0;
 $confirmation_msg = "";
 $delivery_time = date("H:i:s", strtotime("+2 Hours"));
 $price = 0;
+$invalidCity = "";
 
-//if (!isset($_SESSION['streetName'], $_SESSION['streetNumber'], $_SESSION['city'], $_SESSION['zipCode'])) {
-//    $_SESSION['streetName'] = $_SESSION['streetNumber'] = $_SESSION['city'] = $_SESSION['zipCode'] = "";
-//}
+if (!isset($_SESSION['streetName']) && !isset($_SESSION['streetNumber']) && !isset($_SESSION['city']) &&
+            !isset($_SESSION['zipCode'])) {
+    $_SESSION['streetName'] = $_SESSION['streetNumber'] = $_SESSION['city'] = $_SESSION['zipCode'] = null;
+}
 
 if (isset($_COOKIE['totalValue'])) {
     $totalValue = intval($_COOKIE['totalValue']);
@@ -71,13 +72,22 @@ if (isset($_GET['food'])) {
     }
 }
 
+function validateFields(): bool {
+    if ( (isset($_POST['email'])) && (isset($_SESSION['streetName'])) && (isset($_SESSION['streetNumber'])) && (isset($_SESSION['city'])) &&
+        (isset($_SESSION['zipCode']))) {
+            echo 123;
+            return true;
+    } else {
+        return false;
+    }
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($_POST['email'])) {
         $email = "Please enter your email address";
     } else if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
         $email = $_POST['email'];
-        $valid_fields++;
     } else {
         $email = "Please enter a valid email address";
     }
@@ -86,30 +96,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['streetName'] = "Please enter your street name";
     } else {
         $_SESSION['streetName'] = $_POST['street'];
-        $valid_fields++;
     }
 
     if (empty($_POST['streetnumber'])) {
         $_SESSION['streetNumber'] = "Please enter your street number";
     } else if (is_numeric($_POST['streetnumber'])) {
         $_SESSION['streetNumber'] = $_POST['streetnumber'];
-        $valid_fields++;
     } else {
         $_SESSION['streetNumber'] = "Please enter a valid street number";
     }
 
     if (empty($_POST['city'])) {
-        $_SESSION['city'] = "Please enter your city";
+        $invalidCity = "No city entered";
     } else {
         $_SESSION['city'] = $_POST['city'];
-        $valid_fields++;
     }
 
     if (empty($_POST['zipcode'])) {
         $_SESSION['zipCode'] = "Please enter your Zipcode";
     } else if (is_numeric($_POST['zipcode'])) {
         $_SESSION['zipCode'] = $_POST['zipcode'];
-        $valid_fields++;
     } else {
         $_SESSION['zipCode'] = "Please enter a valid Zipcode";
     }
@@ -137,19 +143,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $price += 5;
     }
 
-    //$totalValue = intval($_COOKIE['totalValue']);
-    $totalValue += $price;
-    $totalValue = strval($totalValue);
-    $_COOKIE['totalValue'] = $totalValue;
-    setcookie('totalValue', $totalValue, time() + (86400 * 30));
-
-
-    if ($valid_fields == 5) {
+    if (validateFields()) {
+        $totalValue += $price;
+        $totalValue = strval($totalValue);
+        $_COOKIE['totalValue'] = $totalValue;
+        setcookie('totalValue', $totalValue, time() + (86400 * 30));
         $confirmation_msg = "Thank you for your order. The delivery time is " . $delivery_time . ". The price is " . $price . "€.";
     } else {
         $confirmation_msg = "Please fill in all the fields.";
     }
-
 }
 
 require 'form-view.php';
