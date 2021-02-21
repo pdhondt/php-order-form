@@ -29,7 +29,7 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="email">E-mail:</label>
-                <input type="text" id="email" name="email" class="form-control" placeholder="<?php echo htmlspecialchars($invalidEmail); ?>" value="<?php echo htmlspecialchars($email); ?>"/>
+                <input type="text" id="email" name="email" class="form-control" placeholder="<?php echo htmlspecialchars($invalidEmail); ?>" value="<?php echo htmlspecialchars($_SESSION['email']); ?>"/>
                 <span><?php echo htmlspecialchars($confirmation_msg); ?></span>
             </div>
             <div></div>

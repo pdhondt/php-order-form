@@ -22,7 +22,6 @@ function whatIsHappening() {
 }
 
 // define variables and initialize them with empty values
-//$_SESSION['streetName'] = $_SESSION['streetNumber'] = $_SESSION['city'] = $_SESSION['zipCode'] = "";
 $email = "";
 $confirmation_msg = "";
 $delivery_time = date("H:i:s", strtotime("+2 Hours"));
@@ -31,8 +30,8 @@ $invalidEmail = $invalidStreetName = $invalidStreetNumber = $invalidCity = $inva
 $alert_class = "";
 
 if (!isset($_SESSION['streetName']) && !isset($_SESSION['streetNumber']) && !isset($_SESSION['city']) &&
-            !isset($_SESSION['zipCode'])) {
-    $_SESSION['streetName'] = $_SESSION['streetNumber'] = $_SESSION['city'] = $_SESSION['zipCode'] = null;
+            !isset($_SESSION['zipCode']) && !isset($_SESSION['email'])) {
+    $_SESSION['streetName'] = $_SESSION['streetNumber'] = $_SESSION['city'] = $_SESSION['zipCode'] = $_SESSION['email'] = null;
 }
 
 if (isset($_COOKIE['totalValue'])) {
@@ -63,14 +62,14 @@ $products_drinks = [
 ];
 
 // make the food items the default when loading the page
-$products = $products_food;
-
 if (isset($_GET['food'])) {
     if ($_GET['food'] == 0) {   // when order drinks is clicked, show the drinks items. Otherwise show the food items
         $products = $products_drinks;
     } else {
         $products = $products_food;
     }
+} else {
+    $products = $products_food;
 }
 
 function validateFields(): bool {
@@ -82,12 +81,13 @@ function validateFields(): bool {
     }
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+//if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+function validateOrder() {
     if (empty($_POST['email'])) {
         $invalidEmail = "Please enter your email address";
     } else if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-        $email = $_POST['email'];
+        $_SESSION['email'] = $_POST['email'];
     } else {
         $_POST['email'] = null;
         $invalidEmail = "Please enter a valid email address";
@@ -135,27 +135,60 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     foreach ($products AS $i => $product) {
         if (!empty($_POST['products'][$i])) {
             $numberOfItems = $_POST['products'][$i];
-            $price += ($numberOfItems * $product['price']);
+            $_SESSION['price'] += ($numberOfItems * $product['price']);
         }
     }
 
     if (isset($_POST['express_delivery'])) {
         $delivery_time = date("H:i:s", strtotime("+45 Minutes"));
-        $price += 5;
+        $_SESSION['price'] += 5;
     }
+}
 
+if (!isset($_GET['food'])) {
+    $products = $products_food;
+    validateOrder();
+} else if (isset($_GET['food'])) {
+    validateOrder();
+    if ($_GET['food'] == 0) {   // when order drinks is clicked, show the drinks items. Otherwise show the food items
+        $products = $products_drinks;
+        validateOrder();
+    }
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (validateFields()) {
-        $totalValue += $price;
+        $totalValue += $_SESSION['price'];
         $totalValue = strval($totalValue);
         $_COOKIE['totalValue'] = $totalValue;
         setcookie('totalValue', $totalValue, time() + (86400 * 30));
         $alert_class = "success";
-        $confirmation_msg = "Thank you for your order. The delivery time is " . $delivery_time . ". The price is " . $price . "€.";
+        $confirmation_msg = "Thank you for your order. The delivery time is " . $delivery_time . ". The price is " . $_SESSION['price'] . "€.";
     } else {
         $alert_class = "danger";
         $confirmation_msg = "Please fill in all the fields.";
     }
+} else {
+    if (isset($_GET['food'])) {
+        if ($_GET['food'] == 0) {   // when order drinks is clicked, show the drinks items. Otherwise show the food items
+            $products = $products_drinks;
+            validateOrder();
+        }
+    } else {
+        if (validateFields()) {
+            $totalValue += $_SESSION['price'];
+            $totalValue = strval($totalValue);
+            $_COOKIE['totalValue'] = $totalValue;
+            setcookie('totalValue', $totalValue, time() + (86400 * 30));
+            $alert_class = "success";
+            $confirmation_msg = "Thank you for your order. The delivery time is " . $delivery_time . ". The price is " . $_SESSION['price'] . "€.";
+        } else {
+            $alert_class = "danger";
+            $confirmation_msg = "Please fill in all the fields.";
+        }
+    }
 }
+//}
 
 require 'form-view.php';
 
