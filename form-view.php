@@ -10,6 +10,9 @@
     <title>Order food & drinks</title>
 </head>
 <body>
+<div class="alert alert-<?php echo $alert_class?>" role="alert">
+    <?php echo $confirmation_msg ?>
+</div>
 <div class="container">
     <h1>Order food in restaurant "the Personal Ham Processors"</h1>
     <nav>

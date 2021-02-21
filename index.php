@@ -28,6 +28,7 @@ $confirmation_msg = "";
 $delivery_time = date("H:i:s", strtotime("+2 Hours"));
 $price = 0;
 $invalidEmail = $invalidStreetName = $invalidStreetNumber = $invalidCity = $invalidZipCode = "";
+$alert_class = "";
 
 if (!isset($_SESSION['streetName']) && !isset($_SESSION['streetNumber']) && !isset($_SESSION['city']) &&
             !isset($_SESSION['zipCode'])) {
@@ -73,9 +74,8 @@ if (isset($_GET['food'])) {
 }
 
 function validateFields(): bool {
-    if ( (isset($_POST['email'])) && (isset($_SESSION['streetName'])) && (isset($_SESSION['streetNumber'])) && (isset($_SESSION['city'])) &&
+    if ( (!empty($_POST['email'])) && (isset($_SESSION['streetName'])) && (isset($_SESSION['streetNumber'])) && (isset($_SESSION['city'])) &&
         (isset($_SESSION['zipCode']))) {
-            echo 123;
             return true;
     } else {
         return false;
@@ -89,6 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
         $email = $_POST['email'];
     } else {
+        $_POST['email'] = null;
         $invalidEmail = "Please enter a valid email address";
     }
 
@@ -148,8 +149,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $totalValue = strval($totalValue);
         $_COOKIE['totalValue'] = $totalValue;
         setcookie('totalValue', $totalValue, time() + (86400 * 30));
+        $alert_class = "success";
         $confirmation_msg = "Thank you for your order. The delivery time is " . $delivery_time . ". The price is " . $price . "€.";
     } else {
+        $alert_class = "danger";
         $confirmation_msg = "Please fill in all the fields.";
     }
 }
