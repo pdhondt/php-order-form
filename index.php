@@ -27,7 +27,7 @@ $email = "";
 $confirmation_msg = "";
 $delivery_time = date("H:i:s", strtotime("+2 Hours"));
 $price = 0;
-$invalidCity = "";
+$invalidEmail = $invalidStreetName = $invalidStreetNumber = $invalidCity = $invalidZipCode = "";
 
 if (!isset($_SESSION['streetName']) && !isset($_SESSION['streetNumber']) && !isset($_SESSION['city']) &&
             !isset($_SESSION['zipCode'])) {
@@ -85,39 +85,39 @@ function validateFields(): bool {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($_POST['email'])) {
-        $email = "Please enter your email address";
+        $invalidEmail = "Please enter your email address";
     } else if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
         $email = $_POST['email'];
     } else {
-        $email = "Please enter a valid email address";
+        $invalidEmail = "Please enter a valid email address";
     }
 
     if (empty($_POST['street'])) {
-        $_SESSION['streetName'] = "Please enter your street name";
+        $invalidStreetName = "Please enter your street name";
     } else {
         $_SESSION['streetName'] = $_POST['street'];
     }
 
     if (empty($_POST['streetnumber'])) {
-        $_SESSION['streetNumber'] = "Please enter your street number";
+        $invalidStreetNumber = "Please enter your street number";
     } else if (is_numeric($_POST['streetnumber'])) {
         $_SESSION['streetNumber'] = $_POST['streetnumber'];
     } else {
-        $_SESSION['streetNumber'] = "Please enter a valid street number";
+        $invalidStreetNumber = "Please enter a valid street number";
     }
 
     if (empty($_POST['city'])) {
-        $invalidCity = "No city entered";
+        $invalidCity = "Please enter your city";
     } else {
         $_SESSION['city'] = $_POST['city'];
     }
 
     if (empty($_POST['zipcode'])) {
-        $_SESSION['zipCode'] = "Please enter your Zipcode";
+        $invalidZipCode = "Please enter your Zipcode";
     } else if (is_numeric($_POST['zipcode'])) {
         $_SESSION['zipCode'] = $_POST['zipcode'];
     } else {
-        $_SESSION['zipCode'] = "Please enter a valid Zipcode";
+        $invalidZipCode = "Please enter a valid Zipcode";
     }
 
     // retrieve ordered products via checkboxes & calculate price
